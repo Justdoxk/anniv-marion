@@ -202,10 +202,55 @@
     }
   };
 
+  /* ---------- Musique de fond ----------
+     assets/music.mp3 = extrait 0:41.5 → 2:32.5 du morceau.
+     On démarre à 0:42 (0.5 s dans le fichier) et on boucle à 2:32 (110.5 s). */
+  const MUSIC = { src: "assets/music.mp3", loopStart: 0.5, loopEnd: 110.5, vol: 0.45 };
+  let musicStarted = false, musicGain = null, musicEl = null;
+
+  async function startMusic() {
+    if (musicStarted || !soundOn) return;
+    musicStarted = true;
+    try {
+      // Web Audio : boucle précise à l'échantillon près (marche en https, pas en file://)
+      const ctx = audio();
+      if (!ctx) throw new Error("pas de Web Audio");
+      const res = await fetch(MUSIC.src);
+      const buf = await ctx.decodeAudioData(await res.arrayBuffer());
+      musicGain = ctx.createGain();
+      musicGain.gain.value = soundOn ? MUSIC.vol : 0;
+      musicGain.connect(ctx.destination);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.loop = true;
+      src.loopStart = MUSIC.loopStart;
+      src.loopEnd = MUSIC.loopEnd;
+      src.connect(musicGain);
+      src.start(0, MUSIC.loopStart);
+    } catch (e) {
+      // Repli <audio> (ex : index.html ouvert en local)
+      musicEl = new Audio(MUSIC.src);
+      musicEl.volume = MUSIC.vol;
+      musicEl.currentTime = MUSIC.loopStart;
+      musicEl.addEventListener("timeupdate", () => {
+        if (musicEl.currentTime >= MUSIC.loopEnd) musicEl.currentTime = MUSIC.loopStart;
+      });
+      musicEl.addEventListener("ended", () => { musicEl.currentTime = MUSIC.loopStart; musicEl.play(); });
+      if (soundOn) musicEl.play().catch(() => { musicStarted = false; musicEl = null; });
+    }
+  }
+
+  function setMusic(on) {
+    if (musicGain) musicGain.gain.value = on ? MUSIC.vol : 0;
+    if (musicEl) { if (on) musicEl.play().catch(() => {}); else musicEl.pause(); }
+    if (on) startMusic();
+  }
+
   btnSound.addEventListener("click", () => {
     soundOn = !soundOn;
     btnSound.setAttribute("aria-pressed", String(soundOn));
     btnSound.textContent = soundOn ? "🔇 COUPER LE CHAOS" : "🔊 ACTIVER LE CHAOS";
+    setMusic(soundOn);
     if (soundOn) {
       audio();
       SFX.fanfare();
@@ -218,10 +263,10 @@
   const unlock = (e) => {
     if (unlocked) return;
     unlocked = true;
-    // fanfare d'accueil, sauf si le premier geste sert justement à couper le son
+    // lance la musique, sauf si le premier geste sert justement à couper le son
     if (soundOn && !(e.target.closest && e.target.closest("#btn-sound"))) {
       audio();
-      SFX.fanfare();
+      startMusic();
     }
     window.removeEventListener("pointerdown", unlock, true);
     window.removeEventListener("keydown", unlock, true);
@@ -746,7 +791,7 @@
       const tryStart = () => {
         if (ctx.state === "running" && !unlocked) {
           unlocked = true;
-          SFX.fanfare();
+          startMusic();
         }
       };
       tryStart();
