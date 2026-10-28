@@ -471,13 +471,13 @@
      ========================================================== */
   // son: fichier dans assets/brainrot/sons/ (la vraie voix du brainrot). Sinon, bruitage synthé "sfx".
   const GANG = [
-    { nom: "Tung Tung Tung Sahur", img: "tung-tung-tung-sahur.png", cutout: true, sfx: "tung" },
-    { nom: "Tralalero Tralala", img: "tralalero-tralala.webp", sfx: "tralala" },
-    { nom: "Lirilì Larilà", img: "lirili-larila.webp", sfx: "lirili" },
-    { nom: "Ballerina Cappuccina", img: "ballerina-cappuccina.webp", sfx: "tralala" },
-    { nom: "Brr Brr Patapim", img: "brr-brr-patapim.jpg", sfx: "boing" },
-    { nom: "Chimpanzini Bananini", img: "chimpanzini-bananini.webp", sfx: "pouet" },
-    { nom: "Cappuccino Assassino", img: "cappuccino-assassino.webp", sfx: "lirili" }
+    { nom: "Tung Tung Tung Sahur", img: "tung-tung-tung-sahur.png", cutout: true, son: "tung-tung-tung-sahur.mp3", sfx: "tung" },
+    { nom: "Tralalero Tralala", img: "tralalero-tralala.webp", son: "tralalero-tralala.mp3", sfx: "tralala" },
+    { nom: "Lirilì Larilà", img: "lirili-larila.webp", son: "lirili-larila.mp3", sfx: "lirili" },
+    { nom: "Ballerina Cappuccina", img: "ballerina-cappuccina.webp", son: "ballerina-cappuccina.mp3", sfx: "tralala" },
+    { nom: "Brr Brr Patapim", img: "brr-brr-patapim.jpg", son: "brr-brr-patapim.mp3", sfx: "boing" },
+    { nom: "Chimpanzini Bananini", img: "chimpanzini-bananini.webp", son: "chimpanzini-bananini.mp3", sfx: "pouet" },
+    { nom: "Cappuccino Assassino", img: "cappuccino-assassino.webp", son: "cappuccino-assassino.mp3", sfx: "lirili" }
   ];
   const gangGrid = $("#gang-grid");
   GANG.forEach((g, i) => {
