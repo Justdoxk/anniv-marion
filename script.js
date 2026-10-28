@@ -108,10 +108,13 @@
   }
 
   /* ==========================================================
-     Sons synthétiques (Web Audio API), désactivés par défaut
+     Sons synthétiques (Web Audio API), actifs par défaut.
+     Les navigateurs bloquent l'audio avant une interaction :
+     le son démarre donc au premier clic / tap / touche.
      ========================================================== */
   const btnSound = $("#btn-sound");
-  let soundOn = false;
+  let soundOn = true;
+  let unlocked = false;
   let actx = null;
   let noiseBuf = null;
 
@@ -126,7 +129,7 @@
   }
 
   function tone({ freq = 440, to = null, dur = 0.15, type = "square", vol = 0.12, delay = 0 }) {
-    if (!soundOn) return;
+    if (!soundOn || !unlocked) return;
     const ctx = audio();
     if (!ctx) return;
     const t = ctx.currentTime + delay;
@@ -144,7 +147,7 @@
   }
 
   function noise(dur = 0.4, vol = 0.35) {
-    if (!soundOn) return;
+    if (!soundOn || !unlocked) return;
     const ctx = audio();
     if (!ctx) return;
     if (!noiseBuf) {
@@ -183,6 +186,19 @@
       const f = 260 + Math.min(level, 120) * 10;
       tone({ freq: f, to: f * 1.6, dur: 0.12, type: "sawtooth", vol: 0.07 });
     },
+    tung() {
+      for (let i = 0; i < 3; i++) {
+        tone({ freq: 190, to: 70, dur: 0.14, type: "sine", vol: 0.5, delay: i * 0.17 });
+        tone({ freq: 900, to: 300, dur: 0.03, type: "square", vol: 0.05, delay: i * 0.17 });
+      }
+    },
+    tralala() {
+      [784, 659, 784, 659, 880, 784].forEach((f, i) => tone({ freq: f, dur: 0.11, type: "triangle", vol: 0.18, delay: i * 0.12 }));
+    },
+    lirili() {
+      tone({ freq: 500, to: 900, dur: 0.18, type: "sine", vol: 0.2 });
+      tone({ freq: 900, to: 450, dur: 0.22, type: "sine", vol: 0.2, delay: 0.2 });
+    },
     fanfare() {
       const notes = [[523, 0, 0.13], [523, 0.15, 0.13], [523, 0.3, 0.13], [659, 0.45, 0.38], [587, 0.88, 0.13], [659, 1.03, 0.13], [784, 1.18, 0.6]];
       notes.forEach(([f, d, du]) => {
@@ -203,6 +219,17 @@
       confetti(r.left + r.width / 2, r.bottom, 40, 9, 0, Math.PI * 2);
     }
   });
+
+  // Premier geste de l'utilisatrice = déblocage de l'audio
+  const unlock = () => {
+    if (unlocked) return;
+    unlocked = true;
+    if (soundOn) audio();
+    window.removeEventListener("pointerdown", unlock, true);
+    window.removeEventListener("keydown", unlock, true);
+  };
+  window.addEventListener("pointerdown", unlock, true);
+  window.addEventListener("keydown", unlock, true);
 
   // Bruitage au clic partout (data-sfx="nom" pour choisir, "none" si l'élément gère lui-même)
   document.addEventListener("click", (e) => {
@@ -379,6 +406,46 @@
     perso.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); talk(); }
     });
+  });
+
+  /* ==========================================================
+     Gang Italian brainrot (images domaine public, Wikimedia Commons)
+     ========================================================== */
+  const GANG = [
+    { nom: "Tung Tung Tung Sahur", img: "tung-tung-tung-sahur.png", cutout: true, sfx: "tung" },
+    { nom: "Tralalero Tralala", img: "tralalero-tralala.webp", sfx: "tralala" },
+    { nom: "Lirilì Larilà", img: "lirili-larila.webp", sfx: "lirili" },
+    { nom: "Ballerina Cappuccina", img: "ballerina-cappuccina.webp", sfx: "tralala" },
+    { nom: "Brr Brr Patapim", img: "brr-brr-patapim.jpg", sfx: "boing" },
+    { nom: "Chimpanzini Bananini", img: "chimpanzini-bananini.webp", sfx: "pouet" },
+    { nom: "Cappuccino Assassino", img: "cappuccino-assassino.webp", sfx: "lirili" }
+  ];
+  const gangGrid = $("#gang-grid");
+  GANG.forEach((g, i) => {
+    const b = el("button", "spinner");
+    b.type = "button";
+    b.dataset.sfx = "none";
+    b.setAttribute("aria-label", `${g.nom} : clique pour le faire tourner plus vite`);
+    b.style.setProperty("--ring", COLORS[i % COLORS.length]);
+    b.style.setProperty("--r", `${rand(-6, 6).toFixed(1)}deg`);
+    const img = el("img", "spin-img" + (g.cutout ? " cutout" : ""));
+    img.src = `assets/brainrot/${g.img}`;
+    img.alt = "";
+    img.loading = "lazy";
+    img.decoding = "async";
+    let spd = rand(0.55, 1.1);
+    img.style.setProperty("--spd", `${spd.toFixed(2)}s`);
+    img.style.setProperty("--dir", i % 2 ? "reverse" : "normal");
+    b.append(img, el("span", "spin-name", g.nom));
+    b.addEventListener("click", (e) => {
+      spd = spd <= 0.2 ? rand(0.55, 1.1) : Math.max(0.2, spd * 0.6); // trop vite → on repart
+      img.style.setProperty("--spd", `${spd.toFixed(2)}s`);
+      SFX[g.sfx]();
+      const r = img.getBoundingClientRect();
+      floaty(`${g.nom.toUpperCase()} 🌀`, e.clientX || r.left + r.width / 2, r.top, COLORS[i % COLORS.length]);
+      confetti(r.left + r.width / 2, r.top + r.height / 2, 16, 8, 0, Math.PI * 2);
+    });
+    gangGrid.appendChild(b);
   });
 
   /* ==========================================================

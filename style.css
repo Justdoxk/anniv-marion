@@ -253,6 +253,32 @@ main { display: flex; flex-direction: column; gap: clamp(40px, 7vw, 70px); paddi
 .sub { font-weight: 700; font-size: 1.05rem; margin: 0 0 6px; }
 .sub-light .big { color: var(--yellow); }
 
+/* ---------- Gang Italian brainrot (ça tourne TRÈS vite) ---------- */
+.hero-tung {
+  position: absolute; top: clamp(70px, 11vw, 110px); left: clamp(4px, 4vw, 60px);
+  width: auto; height: clamp(110px, 22vw, 220px);
+  animation: spin .7s linear infinite; pointer-events: none;
+}
+.card-gang { --bg: var(--yellow); --b: var(--red); --r: .8deg; }
+.gang { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(46%, 170px), 1fr)); gap: 18px 10px; margin-top: 20px; }
+.spinner {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 6px 0; border: 0; background: none; touch-action: manipulation;
+}
+.spin-img {
+  display: block; width: clamp(110px, 32vw, 160px); height: clamp(110px, 32vw, 160px);
+  object-fit: cover; border-radius: 50%;
+  border: 5px solid var(--ring); box-shadow: 0 0 0 4px #000, 6px 6px 0 4px #000;
+  animation: spin var(--spd, .8s) linear infinite; animation-direction: var(--dir, normal);
+  will-change: transform;
+}
+.spin-img.cutout { object-fit: contain; border: 0; border-radius: 0; box-shadow: none; }
+.spin-name {
+  font-family: var(--f-impact); font-size: clamp(.95rem, 3.4vw, 1.25rem); line-height: 1.05;
+  color: var(--ring); -webkit-text-stroke: 1px #000; paint-order: stroke fill;
+  text-shadow: 2px 2px 0 #000; transform: rotate(var(--r, -3deg));
+}
+
 /* ---------- Aura-mètre ---------- */
 .gauge {
   position: relative; height: 48px; max-width: 560px; margin: 18px auto;
@@ -413,6 +439,7 @@ footer {
   footer { padding-bottom: 110px; }
   .card { box-shadow: 6px 6px 0 #000; }
   .hero { min-height: auto; }
+  .hero-tung { top: 54px; }
 }
 
 /* ---------- Keyframes (transform / opacity uniquement) ---------- */
