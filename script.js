@@ -111,7 +111,8 @@
   let unlocked = false;
   let actx = null;
   let master = null;   // volume général : tout le son passe par ici
-  let volume = 0.2;
+  let volume = 0.2;     // effets + voix des brainrots
+  let musicVol = 0.08;  // musique de fond (curseur séparé)
   let noiseBuf = null;
 
   function audio() {
@@ -210,8 +211,7 @@
   /* ---------- Musique de fond ----------
      assets/music.mp3 = extrait 0:41.5 → 2:32.5 du morceau.
      On démarre à 0:42 (0.5 s dans le fichier) et on boucle à 2:32 (110.5 s). */
-  // vol = part de la musique dans le volume général : 0.4 × 20 % = 8 % au lancement
-  const MUSIC = { src: "assets/music.mp3", loopStart: 0.5, loopEnd: 110.5, vol: 0.4 };
+  const MUSIC = { src: "assets/music.mp3", loopStart: 0.5, loopEnd: 110.5 };
   let musicStarted = false, musicGain = null, musicEl = null;
 
   async function startMusic() {
@@ -224,8 +224,8 @@
       const res = await fetch(MUSIC.src);
       const buf = await ctx.decodeAudioData(await res.arrayBuffer());
       musicGain = ctx.createGain();
-      musicGain.gain.value = soundOn ? MUSIC.vol : 0;
-      musicGain.connect(master);
+      musicGain.gain.value = soundOn ? musicVol : 0;
+      musicGain.connect(ctx.destination);
       const src = ctx.createBufferSource();
       src.buffer = buf;
       src.loop = true;
@@ -236,7 +236,7 @@
     } catch (e) {
       // Repli <audio> (ex : index.html ouvert en local)
       musicEl = new Audio(MUSIC.src);
-      musicEl.volume = MUSIC.vol * volume;
+      musicEl.volume = musicVol;
       musicEl.currentTime = MUSIC.loopStart;
       musicEl.addEventListener("timeupdate", () => {
         if (musicEl.currentTime >= MUSIC.loopEnd) musicEl.currentTime = MUSIC.loopStart;
@@ -247,7 +247,7 @@
   }
 
   function setMusic(on) {
-    if (musicGain) musicGain.gain.value = on ? MUSIC.vol : 0;
+    if (musicGain) musicGain.gain.value = on ? musicVol : 0;
     if (musicEl) { if (on) musicEl.play().catch(() => {}); else musicEl.pause(); }
     if (on) startMusic();
   }
@@ -259,7 +259,14 @@
     volTxt.textContent = `${volInput.value}%`;
     volIcon.textContent = volume === 0 ? "🔇" : volume < 0.5 ? "🔈" : volume < 0.8 ? "🔉" : "🔊";
     if (master) master.gain.setTargetAtTime(volume, actx.currentTime, 0.02);
-    if (musicEl) musicEl.volume = MUSIC.vol * volume;
+  });
+
+  const musicInput = $("#vol-music"), musicTxt = $("#vol-music-txt");
+  musicInput.addEventListener("input", () => {
+    musicVol = musicInput.value / 100;
+    musicTxt.textContent = `${musicInput.value}%`;
+    if (musicGain && soundOn) musicGain.gain.setTargetAtTime(musicVol, actx.currentTime, 0.02);
+    if (musicEl) musicEl.volume = musicVol;
   });
 
   btnSound.addEventListener("click", () => {
