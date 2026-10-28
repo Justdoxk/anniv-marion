@@ -210,7 +210,8 @@
   /* ---------- Musique de fond ----------
      assets/music.mp3 = extrait 0:41.5 → 2:32.5 du morceau.
      On démarre à 0:42 (0.5 s dans le fichier) et on boucle à 2:32 (110.5 s). */
-  const MUSIC = { src: "assets/music.mp3", loopStart: 0.5, loopEnd: 110.5, vol: 0.45 };
+  // vol = part de la musique dans le volume général : 0.4 × 20 % = 8 % au lancement
+  const MUSIC = { src: "assets/music.mp3", loopStart: 0.5, loopEnd: 110.5, vol: 0.4 };
   let musicStarted = false, musicGain = null, musicEl = null;
 
   async function startMusic() {
