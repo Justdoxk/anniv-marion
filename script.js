@@ -36,8 +36,6 @@
     if (text != null) e.textContent = text;
     return e;
   };
-  const storeGet = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
-  const storeSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* tant pis */ } };
 
   const COLORS = ["#39ff14", "#ff00e6", "#fff200", "#00f0ff", "#ff6a00", "#8a2be2", "#ff1744", "#2979ff"];
   const EMOJIS = ["💀", "🔥", "🗿", "🤡", "✨", "🎂", "🎉", "👑", "💅", "🥳", "🌈", "⭐"];
@@ -92,7 +90,7 @@
   const btnCalm = $("#btn-calm");
   let calm = false;
 
-  function setCalm(on, save) {
+  function setCalm(on) {
     calm = on;
     document.body.classList.toggle("calm", on);
     // si l'utilisatrice a reduced-motion mais choisit explicitement le chaos
@@ -100,12 +98,8 @@
     btnCalm.setAttribute("aria-pressed", String(on));
     btnCalm.textContent = on ? "mode chaos 🤪" : "mode calme 😴";
     if (on) parts.length = 0;
-    if (save) storeSet("calm", on ? "1" : "0");
   }
-  btnCalm.addEventListener("click", () => setCalm(!calm, true));
-  if (mqReduce.addEventListener) {
-    mqReduce.addEventListener("change", (e) => { if (storeGet("calm") === null) setCalm(e.matches); });
-  }
+  btnCalm.addEventListener("click", () => setCalm(!calm));
 
   /* ==========================================================
      Sons synthétiques (Web Audio API), actifs par défaut.
@@ -743,8 +737,22 @@
   /* ==========================================================
      Lancement
      ========================================================== */
-  const saved = storeGet("calm");
-  setCalm(saved === null ? mqReduce.matches : saved === "1");
+  // Toujours en mode chaos au lancement (le bouton "mode calme" reste dispo)
+  setCalm(false);
+  // Certains navigateurs autorisent le son sans clic : on tente le coup
+  if (soundOn) {
+    const ctx = audio();
+    if (ctx) {
+      const tryStart = () => {
+        if (ctx.state === "running" && !unlocked) {
+          unlocked = true;
+          SFX.fanfare();
+        }
+      };
+      tryStart();
+      setTimeout(tryStart, 300);
+    }
+  }
   buildCandles();
   schedulePopup(true);
   setTimeout(bigParty, 300);
