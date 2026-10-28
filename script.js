@@ -112,7 +112,7 @@
   let actx = null;
   let master = null;   // volume général : tout le son passe par ici
   let volume = 0.2;     // effets + voix des brainrots
-  let musicVol = 0.08;  // musique de fond (curseur séparé)
+  let musicVol = 0.03;  // musique de fond (curseur séparé)
   let noiseBuf = null;
 
   function audio() {
