@@ -221,10 +221,14 @@
   });
 
   // Premier geste de l'utilisatrice = déblocage de l'audio
-  const unlock = () => {
+  const unlock = (e) => {
     if (unlocked) return;
     unlocked = true;
-    if (soundOn) audio();
+    // fanfare d'accueil, sauf si le premier geste sert justement à couper le son
+    if (soundOn && !(e.target.closest && e.target.closest("#btn-sound"))) {
+      audio();
+      SFX.fanfare();
+    }
     window.removeEventListener("pointerdown", unlock, true);
     window.removeEventListener("keydown", unlock, true);
   };
