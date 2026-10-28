@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>W ANNIVERSAIRE MARION 🎂💀</title>
+  <meta name="description" content="Site d'anniversaire 100% brainrot. Aura +1000. No cap.">
+  <meta name="theme-color" content="#ff00e6">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎂%3C/text%3E%3C/svg%3E">
+  <!-- Polices de secours pour les téléphones qui n'ont pas Comic Sans / Impact / Papyrus -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Comic+Neue:wght@400;700&family=Uncial+Antiqua&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"><div class="bg-strip"></div><div class="bg-dots"></div></div>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <div id="trail" aria-hidden="true"></div>
+  <div id="popups"></div>
+
+  <div class="controls">
+    <button type="button" id="btn-sound" class="btn-chaos" aria-pressed="false">🔊 ACTIVER LE CHAOS</button>
+    <button type="button" id="btn-calm" class="btn-calm" aria-pressed="false">mode calme 😴</button>
+  </div>
+
+  <div class="marquee" aria-label="Bandeau défilant">
+    <div class="marquee-track"><span data-marquee>🔥 W ANNIVERSAIRE MARION 🔥 AURA +1000 🗿 NO CAP 💅</span><span data-marquee aria-hidden="true"></span></div>
+  </div>
+
+  <header class="hero" id="hero">
+    <p class="hero-pre">⚠️ ALERTE ÉVÉNEMENT OHIO-LEVEL ⚠️</p>
+    <div class="starburst" aria-hidden="true"><span>NEW !!<br><b data-fill="age">15</b> ANS<br>🔥</span></div>
+    <h1 class="wordart">
+      <span class="wa-line wa-1" data-wordart>JOYEUX ANNIVERSAIRE</span>
+      <span class="wa-line wa-2" data-wordart data-fill="prenom-upper">MARION</span>
+    </h1>
+    <p class="hero-age"><span data-fill="age">15</span> ANS 🔥 AURA +1000 🔥 NO CAP</p>
+    <p class="hero-sub">🚧 site en construction depuis <span data-fill="annee">2011</span> 🚧</p>
+
+    <div class="cast">
+      <figure class="perso" data-perso="gatolas" data-sfx="none" tabindex="0" role="button" aria-label="Gâtolas, le gâteau à jambes. Clique pour qu'il parle." style="--r:-3deg">
+        <p class="bubble" aria-live="polite"></p>
+        <div class="gatolas" aria-hidden="true">
+          <span class="g-flame">🔥</span><span class="g-candle"></span>
+          <span class="g-arm l"></span><span class="g-arm r"></span>
+          <span class="g-body"><span class="g-glasses"></span><span class="g-mouth"></span></span>
+          <span class="g-leg l"></span><span class="g-leg r"></span>
+        </div>
+        <figcaption>Gâtolas, gâteau à jambes</figcaption>
+      </figure>
+
+      <figure class="perso" data-perso="moai" data-sfx="none" tabindex="0" role="button" aria-label="Moaï Disco. Clique pour qu'il parle." style="--r:2deg">
+        <p class="bubble" aria-live="polite"></p>
+        <div class="moai" aria-hidden="true">
+          <span class="moai-disco">🪩</span>
+          <span class="moai-hat"></span>
+          <span class="moai-arm l">🤙</span>
+          <span class="moai-face">🗿</span>
+          <span class="moai-arm r">✨</span>
+        </div>
+        <figcaption>Moaï Disco, danse depuis 800 ans</figcaption>
+      </figure>
+
+      <figure class="perso" data-perso="patate" data-sfx="none" tabindex="0" role="button" aria-label="Patate Sigma. Clique pour qu'elle parle." style="--r:-1deg">
+        <p class="bubble" aria-live="polite"></p>
+        <svg class="patate" viewBox="0 0 120 150" width="110" height="138" aria-hidden="true">
+          <line x1="22" y1="95" x2="4" y2="78" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+          <line x1="100" y1="92" x2="117" y2="74" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+          <line x1="46" y1="132" x2="42" y2="147" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+          <line x1="74" y1="132" x2="79" y2="147" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+          <path d="M60 35 C95 30 110 70 100 105 C92 135 30 140 20 110 C8 75 25 40 60 35Z" fill="#d2a05a" stroke="#000" stroke-width="4"/>
+          <circle cx="36" cy="100" r="4" fill="#a8743a"/><circle cx="88" cy="58" r="3" fill="#a8743a"/><circle cx="84" cy="114" r="5" fill="#a8743a"/>
+          <polygon points="38,40 44,12 54,30 60,4 66,30 76,12 82,40" fill="#fff200" stroke="#000" stroke-width="3" stroke-linejoin="round"/>
+          <circle cx="60" cy="18" r="3.5" fill="#ff00e6"/>
+          <circle cx="47" cy="74" r="10" fill="#fff" stroke="#000" stroke-width="3"/><circle cx="50" cy="76" r="4.5" fill="#000"/>
+          <circle cx="76" cy="72" r="10" fill="#fff" stroke="#000" stroke-width="3"/><circle cx="79" cy="74" r="4.5" fill="#000"/>
+          <path d="M36 58 L56 62" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+          <path d="M66 54 L86 46" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+          <path d="M50 100 Q66 110 80 94" stroke="#000" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </svg>
+        <figcaption>Patate Sigma, ministre de l'Aura</figcaption>
+      </figure>
+    </div>
+  </header>
+
+  <div class="marquee alt" aria-hidden="true">
+    <div class="marquee-track"><span data-marquee2></span><span data-marquee2></span></div>
+  </div>
+
+  <main>
+    <!-- 1. AURA-MÈTRE -->
+    <section class="card card-aura" id="aura">
+      <h2 class="title">🗿 AURA-MÈTRE 🗿</h2>
+      <p class="sub">Clique pour <span class="big">FARMER</span> de l'<span class="tiny">aura</span> pour <span class="wavy" data-fill="prenom">Marion</span></p>
+      <div class="gauge" id="gauge">
+        <div class="gauge-fill" id="gauge-fill"></div>
+        <span class="gauge-txt" id="aura-points">0 aura</span>
+      </div>
+      <p class="aura-msg" id="aura-msg" aria-live="polite">aura niveau : PNJ en sortie de mise à jour 😐</p>
+      <button type="button" class="btn-mega" id="btn-aura" data-sfx="none">+ AURA 💪</button>
+    </section>
+
+    <!-- 2. GÂTEAU -->
+    <section class="card card-cake" id="gateau">
+      <h2 class="title t-comic">🎂 SOUFFLE LES <span data-fill="age">15</span> BOUGIES 🎂</h2>
+      <p class="cake-count" id="cake-count" aria-live="polite"></p>
+      <div class="cake">
+        <div class="candles" id="candles"></div>
+        <div class="layer layer-top"></div>
+        <div class="layer layer-mid"></div>
+        <div class="layer layer-bot"><span data-fill="prenom-upper">MARION</span></div>
+        <div class="plate"></div>
+      </div>
+      <div class="cake-win" id="cake-win" hidden>
+        <p class="win-title" id="win-title"></p>
+        <p class="win-sub">C'est un <b>W anniversaire</b>. Le conseil des moaïs valide. Ohio applaudit. 🗿🌽👏</p>
+      </div>
+      <button type="button" class="btn-small" id="btn-relight" hidden>🔁 Rallumer (pour farmer encore + d'aura)</button>
+    </section>
+
+    <!-- 3. MESSAGES -->
+    <section class="card card-msgs" id="messages">
+      <h2 class="title t-papyrus">💌 MESSAGES TOP SECRET 💌</h2>
+      <p class="sub sub-light">classés <span class="big">CONFIDENTIEL</span> défense <span class="tiny">(niveau rizz)</span></p>
+      <div class="msgs" id="msgs"></div>
+    </section>
+
+    <!-- 4. COMPTEUR -->
+    <section class="card card-counter" id="compteur">
+      <h2 class="title">⏱️ ÂGE DE <span data-fill="prenom-upper">MARION</span> EN SECONDES ⏱️</h2>
+      <p class="counter"><span id="age-seconds">0</span><small id="age-tenths">,0</small></p>
+      <p class="counter-unit">secondes de slay ininterrompu</p>
+      <ul class="stats">
+        <li><b id="age-minutes">0</b> minutes d'aura</li>
+        <li><b id="age-days">0</b> jours de rizz</li>
+        <li><b id="age-heart">0</b> battements de cœur <span class="tiny">(environ, on n'est pas médecins)</span></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p class="footer-main">Site certifié 100% brainrot par <b data-fill="frere">Armand</b>, son frère sigma 🗿✨</p>
+    <p>Vous êtes la visiteuse n° <span class="visits">1 000 000</span> 🏆</p>
+    <div class="badges" aria-hidden="true">
+      <span class="badge b1">BRAINROT<br>INSIDE</span>
+      <span class="badge b2">AURA<br>CERTIFIED ✔</span>
+      <span class="badge b3">HTML 4.01<br>(mensonge)</span>
+      <span class="badge b4">MADE WITH<br>💀 &amp; ❤️</span>
+    </div>
+    <p class="tiny-print">Meilleur affichage : Netscape 4 en 800×600. Aucun neurone n'a été maltraité pendant la création de ce site (ou presque).</p>
+  </footer>
+
+  <noscript><p class="noscript">⚠️ Active JavaScript pour libérer le chaos complet (confettis, bougies, aura…).</p></noscript>
+</body>
+</html>
