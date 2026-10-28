@@ -110,6 +110,8 @@
   let soundOn = true;
   let unlocked = false;
   let actx = null;
+  let master = null;   // volume général : tout le son passe par ici
+  let volume = 0.5;
   let noiseBuf = null;
 
   function audio() {
@@ -117,6 +119,9 @@
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return null;
       actx = new AC();
+      master = actx.createGain();
+      master.gain.value = volume;
+      master.connect(actx.destination);
     }
     if (actx.state === "suspended") actx.resume();
     return actx;
@@ -135,7 +140,7 @@
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g).connect(ctx.destination);
+    o.connect(g).connect(master);
     o.start(t);
     o.stop(t + dur + 0.03);
   }
@@ -158,7 +163,7 @@
     const g = ctx.createGain();
     g.gain.setValueAtTime(vol, ctx.currentTime);
     g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
-    src.connect(f).connect(g).connect(ctx.destination);
+    src.connect(f).connect(g).connect(master);
     src.start();
     src.stop(ctx.currentTime + dur);
   }
@@ -219,7 +224,7 @@
       const buf = await ctx.decodeAudioData(await res.arrayBuffer());
       musicGain = ctx.createGain();
       musicGain.gain.value = soundOn ? MUSIC.vol : 0;
-      musicGain.connect(ctx.destination);
+      musicGain.connect(master);
       const src = ctx.createBufferSource();
       src.buffer = buf;
       src.loop = true;
@@ -230,7 +235,7 @@
     } catch (e) {
       // Repli <audio> (ex : index.html ouvert en local)
       musicEl = new Audio(MUSIC.src);
-      musicEl.volume = MUSIC.vol;
+      musicEl.volume = MUSIC.vol * volume;
       musicEl.currentTime = MUSIC.loopStart;
       musicEl.addEventListener("timeupdate", () => {
         if (musicEl.currentTime >= MUSIC.loopEnd) musicEl.currentTime = MUSIC.loopStart;
@@ -245,6 +250,16 @@
     if (musicEl) { if (on) musicEl.play().catch(() => {}); else musicEl.pause(); }
     if (on) startMusic();
   }
+
+  // Curseur de volume (0–100 %, 50 % par défaut)
+  const volInput = $("#vol"), volTxt = $("#vol-txt"), volIcon = $("#vol-icon");
+  volInput.addEventListener("input", () => {
+    volume = volInput.value / 100;
+    volTxt.textContent = `${volInput.value}%`;
+    volIcon.textContent = volume === 0 ? "🔇" : volume < 0.5 ? "🔈" : volume < 0.8 ? "🔉" : "🔊";
+    if (master) master.gain.setTargetAtTime(volume, actx.currentTime, 0.02);
+    if (musicEl) musicEl.volume = MUSIC.vol * volume;
+  });
 
   btnSound.addEventListener("click", () => {
     soundOn = !soundOn;
