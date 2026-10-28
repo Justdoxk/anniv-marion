@@ -111,7 +111,7 @@
   let unlocked = false;
   let actx = null;
   let master = null;   // volume général : tout le son passe par ici
-  let volume = 0.5;
+  let volume = 0.2;
   let noiseBuf = null;
 
   function audio() {
@@ -469,6 +469,7 @@
   /* ==========================================================
      Gang Italian brainrot (images domaine public, Wikimedia Commons)
      ========================================================== */
+  // son: fichier dans assets/brainrot/sons/ (la vraie voix du brainrot). Sinon, bruitage synthé "sfx".
   const GANG = [
     { nom: "Tung Tung Tung Sahur", img: "tung-tung-tung-sahur.png", cutout: true, sfx: "tung" },
     { nom: "Tralalero Tralala", img: "tralalero-tralala.webp", sfx: "tralala" },
@@ -495,10 +496,18 @@
     img.style.setProperty("--spd", `${spd.toFixed(2)}s`);
     img.style.setProperty("--dir", i % 2 ? "reverse" : "normal");
     b.append(img, el("span", "spin-name", g.nom));
+    const clip = g.son ? new Audio(`assets/brainrot/sons/${g.son}`) : null;
+    if (clip) clip.preload = "auto";
     b.addEventListener("click", (e) => {
       spd = spd <= 0.2 ? rand(0.55, 1.1) : Math.max(0.2, spd * 0.6); // trop vite → on repart
       img.style.setProperty("--spd", `${spd.toFixed(2)}s`);
-      SFX[g.sfx]();
+      if (clip && soundOn) {
+        clip.volume = volume;
+        clip.currentTime = 0;
+        clip.play().catch(() => SFX[g.sfx]());
+      } else {
+        SFX[g.sfx]();
+      }
       const r = img.getBoundingClientRect();
       floaty(`${g.nom.toUpperCase()} 🌀`, e.clientX || r.left + r.width / 2, r.top, COLORS[i % COLORS.length]);
       confetti(r.left + r.width / 2, r.top + r.height / 2, 16, 8, 0, Math.PI * 2);
